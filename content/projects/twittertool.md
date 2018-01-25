@@ -5,7 +5,7 @@ draft: false
 highlight: "true"
 ---
 
-#Kivy imports ar for GUI creation
+#Kivy imports are for GUI creation
 import kivy
 kivy.require('1.9.0')
 
