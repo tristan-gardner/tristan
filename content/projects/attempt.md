@@ -1,76 +1,277 @@
 ---
-title: "attempt"
+title: "Twitter Tool"
 date: 2018-01-22T11:01:18-05:00
 draft: false
 highlight: "true"
 ---
 
 
-EDUCATION AND HONORS
+import kivy
+kivy.require('1.9.0')
 
-Colgate University, Bachelor of Arts, Hamilton, NY
+from kivy.app import App
+from kivy.uix.button import Label
+from kivy.uix.widget import Widget
+from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.boxlayout import BoxLayout
+from kivy.graphics.texture import Texture
 
-Major: Computer Science, Cumulative GPA 3.43 /4.00
+import os
+import tweepy
+import time
 
-Dean's Award for Academic Excellence (Fall 2015, Spring 2016, Fall 2016)
+## Make sure the twitter account has less than twenty lists befor running this program
+
+def userSearch(api,q,members, max_members, cutoff, list_id):
+z = 0
+for person in tweepy.Cursor(api.search_users, q).items():
+if len(members) >= max_members:
+#print("full2")
+return members
+id = person.id
+followers = person.followers_count
+if id not in members and id != 17967668 and person.lang == "en":
+if followers > cutoff:
+print(z, person.screen_name)
+z+=1
+api.add_list_member(list_id = list_id, id=id)
+members.add(id)
+
+def generate(keyword, followers, max_members):
+# setup
+# Consumer Key (API Key)
+cons_key = <input consumer key>
+# Consumer Secret (API Secret)
+cons_secret = <input consumer secret>
+# Access Token
+access_token = <input access token>
+# Access Token Secret
+access_token_secret = <input access token>
+
+auth = tweepy.OAuthHandler(cons_key, cons_secret)
+auth.set_access_token(access_token, access_token_secret)
+api = tweepy.API(auth)
+
+# Bot code below
+
+q = keyword
+create = True # set to false to add to a list, true to create a new one
+screen_name = "upraise_pr"
+list_id = 0
+if create:
+l = api.create_list(q,"private",q)
+list_id = l.id
+max_members = int(max_members)
+cutoff =  int(followers) #only add to list if they have more than cutoff followers
+buzzwords = {"marketing", "cmo", "PR", "public", "relations", "ceo", "company", "press", "promotion", "content", "agency", "firm", "coverage"}
+
+members = set()
+i = 0
+z = 0
+while api.rate_limit_status()["resources"]["application"]["/application/rate_limit_status"]["limit"] > 1:
+try:
+for stat in tweepy.Cursor(api.search, q = q, result_type = "popular").items():
+if len(members) >= max_members:
+#print(len(members))
+#print(members)
+#print("Full1")
+return members
+id = stat.user.id
+followers = stat.user.followers_count
+if id not in members and id != 17967668 and stat.user.lang == "en":
+if followers > cutoff:
+#print(i, stat.user.screen_name)
+i+=1
+api.add_list_member(list_id = list_id, id=id)
+members.add(id)
+#print("1 done")
+for person in tweepy.Cursor(api.search_users, q).items():
+if len(members) >= max_members:
+#print("full2")
+return members
+id = person.id
+followers = person.followers_count
+if id not in members and id != 17967668 and person.lang == "en":
+if followers > cutoff:
+#print(z, person.screen_name)
+z+=1
+api.add_list_member(list_id = list_id, id=id)
+members.add(id)
+#userSearch(api, q, members, max_members,cutoff, z)
 
 
-WORK EXPERIENCE
-
-Software Engineer Intern, Upraise Marketing, San Francisco, CA
-May 2019
-Summer 2017 • Wrote a Python Twitter scraping tool to create a list of relevant accounts based on user search input to
-increase a client company's social media presence
-• Led meetings to receive feedback and better tailor the Twitter tool to the account managers needs
-• Conducted preliminary research on cybersecurity forums and webpages to provide account managers
-with leads and contact information to follow up with
-
-Education Assistant, Picker Art Gallery, Hamilton, NY Spring 2017
-• Built a curriculum around an exclusive Picker Art Gallery collection for high school
-history teachers to use in the classroom
-• Presented the proposed lesson to teachers and administrators to receive feedback and
-ensure it met the necessary common core standards
-• Helped structure activities for and assisted with tours of visiting elementary schools
-allowing students to better interact with the exhibit
-
-Intern, California Appellate Project (CAP), San Francisco, CA Summer 2016
-• Researched trial transcripts, investigation notes, and archived news articles to discover possible leads for future investigation by caseworkers and lawyers in client death row appeals
-• Interviewed several clients to gain more information for their file, further opening areas of investigation, and to explain the progress made on the case
-• Contacted prison officials regarding treatment of inmates with HEP-C to update CAP’s website so lawyers can know what rights and expectations their clients should have
 
 
-COMPUTING AND MATH
-
-Object Oriented Programming, University of Otago, Dunedin, New Zealand Fall 2017
-• Topics covered: Object Oriented design principles i.e. coupling and cohesion, inheritance and composition
-• Example Project: Built a PDF viewer which supported basic built in functionality i.e. zoom, bookmarks, commenting, and relative indexing
-
-Discrete Structures, Colgate, Hamilton, NY Spring 2017 • Topics Covered: Graphs, trees, finite state machines, circuits, sets, abstract and concrete datatypes,
-boolean algebra
-
-Computer Organization, Colgate, Hamilton, NY Fall 2016
-• Topics covered: hardware/software interface, CPU structure, logic, pipeline hazard recognition and resolution
-• Example project: Developed a simulation of a pipeline CPU in logisim, program could compute all basic operations and comparisons
-
-Intro to Computing II, Colgate, Hamilton, NY Spring 2016 • Topics covered: algorithm analysis, recursion, inheritance, polymorphism, hashing
-• Example project: Created a miniature web search engine, final product scanned pages for a user
-entered term, and returned a list of pages sorted by relevance
-
-Computer Science Tutor, Self Employed, Hamilton, NY Fall 2015 • Instructed classmates on Python programming, providing explanation regarding syntax and usage to
-increase student comprehension
-• Assisted with homework assignments and studying for tests to help achieve desired grade; all students
-finished with a B or higher in the class
+except tweepy.TweepError as e:
+if 'Failed to send request:' in e.reason:
+#print("Time out error caught.")
+flag = True
+time.sleep(15)
+continue
 
 
-VOLUNTEER EXPERIENCE
+return members
 
-Volunteer, Ecology Projects International, Belize Summer 2015
-• Monitored invasive marine species, checked various locations for the presence of tiger fish attempting to identify if they were spreading along the reef
-• Participated in study of dolphin communications, assisted lead biologist with hydrophone placement, aimed to determine if increased boat traffic harmed the dolphins’ ability to hunt
+def userRelevant(user, hashtagKey, recurrence, pages):
+# setup
+# Consumer Key (API Key)
+cons_key = <input consumer key>
+# Consumer Secret (API Secret)
+cons_secret = <input consumer secret>
+# Access Token
+access_token = <input access token>
+# Access Token Secret
+access_token_secret = <input token secret>
 
-Campaign Intern, Libby for Mayor, Oakland, CA Fall 2014
-• Staffed telephone banks contacted registered voters in order to poll and inform voters about the candidate’s stances
-• Delivered campaign literature door to door to increase brand recognition for successful 2014 mayoral campaign by Oakland Mayor Libby Schaaf
+auth = tweepy.OAuthHandler(cons_key, cons_secret)
+auth.set_access_token(access_token, access_token_secret)
+api = tweepy.API(auth)
 
 
-LANGUAGES Proficient: Python, Swift - Familiar: Java, C++
+count = 0
+#print(statuses[0].entities.get("hashtags")[0]['text'])
+for i in range(pages):
+statuses = api.user_timeline(id = user, page = i)
+#print(i)
+for item in statuses:
+hashtags = item.entities.get("hashtags")
+text = item.text
+text = text.split(" ")
+words = []
+for hashtag in hashtags:
+word = hashtag['text']
+if word.lower() in hashtagKey:
+count += 1
+if count == recurrence:
+return True
+
+for word in text:
+if word in hashtagKey:
+count+=1
+if count == recurrence:
+return True
+return False
+
+
+def generateSpecific(keyword,followers,hashtag,recurrence, tweetSets, max_members):
+# setup
+# Consumer Key (API Key)
+cons_key = <input consumer key>
+# Consumer Secret (API Secret)
+cons_secret = <input cons secret>
+# Access Token
+access_token = <input access token>
+# Access Token Secret
+access_token_secret = <input token secret>
+
+auth = tweepy.OAuthHandler(cons_key, cons_secret)
+auth.set_access_token(access_token, access_token_secret)
+api = tweepy.API(auth)
+
+# Bot code below
+
+q = keyword
+terms_list = hashtag.split(" ")
+term = set()
+for word in terms_list:
+term.add(word.lower())
+recurrence = int(recurrence)
+pages = int(tweetSets)
+max_members = int(max_members)
+create = True
+
+screen_name = "upraise_pr"
+if create:
+l = api.create_list(q,"private",q)
+list_id = l.id
+
+cutoff = int(followers) #only add to list if they have more than cutoff followers
+
+members = set()
+i = 0
+z = 0
+while api.rate_limit_status()["resources"]["application"]["/application/rate_limit_status"]["limit"] > 10:
+try:
+for stat in tweepy.Cursor(api.search, q = q, result_type = "popular").items():
+if len(members) >= max_members:
+#print("Full1")
+return members
+id = stat.user.id
+followers = stat.user.followers_count
+if id not in members and id != 17967668 and stat.user.lang == "en":
+if followers > cutoff and userRelevant(id, term, recurrence,pages):
+#print(i, stat.user.screen_name)
+i+=1
+api.add_list_member(list_id = list_id, id=id)
+members.add(id)
+for person in tweepy.Cursor(api.search_users, q).items():
+if len(members) >= max_members:
+return members
+id = person.id
+followers = person.followers_count
+if not id in members and followers > cutoff and id != 17967668 and userRelevant(id, term, recurrence,pages) and person.lang == "en":
+api.add_list_member(list_id = list_id, id=id)
+#print(z, person.screen_name)
+z+=1
+members.add(id)
+
+
+except tweepy.TweepError as e:
+if 'Failed to send request:' in e.reason:
+#print("Time out error caught.")
+flag = True
+time.sleep(15)
+continue
+
+return members
+
+class SearchBoxLayout(BoxLayout):
+##    def test(self, hashtag):
+##        if hashtag:
+##            try:
+##                l = hashtag.split(" ")
+##                print(l)
+##            except Exception:
+##                return
+
+def search(self, keyword, followers, max_members):
+if keyword != "" and followers != "" and max_members != '':
+try:
+self.display.text = "Searching"
+generate(keyword, followers, max_members)
+except Exception as e:
+print(e)
+self.display.text = "Error"
+else:
+self.display.text = "For Search enter search term, followers, and members "
+
+
+def advancedSearch(self, keyword, followers, hashtag, recurrence, tweetSets, max_members):
+if keyword and followers and hashtag and recurrence and tweetSets and max_members:
+try:
+self.display.text = "Searching"
+generateSpecific(keyword,followers,hashtag,recurrence, tweetSets, max_members)
+except Exception:# as e:
+#print(e)
+self.display.text = "Error"
+else:
+self.display.text = "For advanced Search fill in all fields"
+
+class SearchApp(App):
+
+def build(self):
+return SearchBoxLayout()
+
+def main():
+searchApp = SearchApp()
+searchApp.run()
+
+if __name__ == "__main__":
+main()
+
+
+
+
+
+
