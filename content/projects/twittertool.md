@@ -5,11 +5,12 @@ draft: false
 highlight: "true"
 ---
 
-
+#Kivy imports ar for GUI creation
 import kivy
 kivy.require('1.9.0')
 
 from kivy.app import App
+
 from kivy.uix.button import Label
 from kivy.uix.widget import Widget
 from kivy.uix.floatlayout import FloatLayout
