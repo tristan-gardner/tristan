@@ -40,13 +40,13 @@ def userSearch(api,q,members, max_members, cutoff, list_id):
 def generate(keyword, followers, max_members):
     # setup
     # Consumer Key (API Key)
-    cons_key = 'pNnQDzpuvtblJO1LCuR4Qm5SO'
+    cons_key = <input consumer key>
     # Consumer Secret (API Secret)
-    cons_secret = 'thKKhQzJG97oK8w5w4g9btOADMg6gIgfAnc70RO93X750CzcTf'
+    cons_secret = <input consumer secret>
     # Access Token
-    access_token = '17967668-61FOP0CFYZxyL6m9xYtJxZWIx0F5r0GlHFJ14xXUA'
+    access_token = <input access token>
     # Access Token Secret
-    access_token_secret = '4Nekfkg9Z3yldXIuOHC9lAkV9AKOiCGFHZ987Teg55gU5'
+    access_token_secret = <input access token>
 
     auth = tweepy.OAuthHandler(cons_key, cons_secret)
     auth.set_access_token(access_token, access_token_secret)
@@ -115,13 +115,13 @@ def generate(keyword, followers, max_members):
 def userRelevant(user, hashtagKey, recurrence, pages):
     # setup
     # Consumer Key (API Key)
-    cons_key = 'pNnQDzpuvtblJO1LCuR4Qm5SO'
+    cons_key = <input consumer key>
     # Consumer Secret (API Secret)
-    cons_secret = 'thKKhQzJG97oK8w5w4g9btOADMg6gIgfAnc70RO93X750CzcTf'
+    cons_secret = <input consumer secret>
     # Access Token
-    access_token = '17967668-61FOP0CFYZxyL6m9xYtJxZWIx0F5r0GlHFJ14xXUA'
+    access_token = <input access token>
     # Access Token Secret
-    access_token_secret = '4Nekfkg9Z3yldXIuOHC9lAkV9AKOiCGFHZ987Teg55gU5'
+    access_token_secret = <input token secret>
 
     auth = tweepy.OAuthHandler(cons_key, cons_secret)
     auth.set_access_token(access_token, access_token_secret)
@@ -156,13 +156,13 @@ def userRelevant(user, hashtagKey, recurrence, pages):
 def generateSpecific(keyword,followers,hashtag,recurrence, tweetSets, max_members):
     # setup
     # Consumer Key (API Key)
-    cons_key = 'pNnQDzpuvtblJO1LCuR4Qm5SO'
+    cons_key = <input consumer key>
     # Consumer Secret (API Secret)
-    cons_secret = 'thKKhQzJG97oK8w5w4g9btOADMg6gIgfAnc70RO93X750CzcTf'
+    cons_secret = <input cons secret>
     # Access Token
-    access_token = '17967668-61FOP0CFYZxyL6m9xYtJxZWIx0F5r0GlHFJ14xXUA'
+    access_token = <input access token>
     # Access Token Secret
-    access_token_secret = '4Nekfkg9Z3yldXIuOHC9lAkV9AKOiCGFHZ987Teg55gU5'
+    access_token_secret = <input token secret>
 
     auth = tweepy.OAuthHandler(cons_key, cons_secret)
     auth.set_access_token(access_token, access_token_secret)
