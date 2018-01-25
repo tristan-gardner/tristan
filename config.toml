@@ -1,0 +1,39 @@
+baseurl = "https://example.com/"
+languageCode = "en-US"
+title = "Tristan Gardner"
+# Enable comments by entering your Disqus shortname
+disqusShortname = "Tris"
+# Enable Google Analytics by entering your tracking code
+googleAnalytics = ""
+theme = "hugo-sustain-master"
+
+[permalinks]
+  post = "/:year/:month/:day/:slug"
+
+[params]
+  avatar = "profile.jpg"
+  author = "Tristan Gardner"
+  description = "Personal site to house my projects and resumé.  Portfolio coming soon."
+
+  # Custom assets can be linked with their paths relative to static/
+  custom_css = []
+  custom_js  = []
+
+[params.social]
+  Github        = "tristan-gardner"
+  Email         = "tgardner@colgate.edu"
+  LinkedIn      = "tristan-gardner-1677b8131"
+  Stackoverflow = "username"
+
+## Main Menu
+
+[[menu.main]]
+  name = "projects"
+  identifier = "projects"
+  weight = 200
+  url = "/projects/"
+[[menu.main]]
+  name = "resume"
+  identifier = "resume"
+  weight = 300
+  url = "/resume/"
