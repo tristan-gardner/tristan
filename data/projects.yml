@@ -1,11 +1,6 @@
----
-categories: ["Projects"]
-date: "2016-10-02T22:55:05-04:00"
-tags: ["projects"]
-title: "Twitter Tool"
-showpagemeta: false
----
-import kivy
+name: TwitterTool
+source:
+  import kivy
 kivy.require('1.9.0')
 
 from kivy.app import App
